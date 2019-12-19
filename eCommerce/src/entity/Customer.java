@@ -10,7 +10,9 @@ import java.util.List;
  * 
  */
 @Entity
-@NamedQuery(name="Customer.findAll", query="SELECT c FROM Customer c")
+
+@NamedQuery(name = "Customer.findAll", query = "SELECT c FROM Customer c")
+
 public class Customer implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -18,21 +20,28 @@ public class Customer implements Serializable {
 	@Column(name="customer_id")
 	private int customerId;
 
+	@Column(name="address")
 	private String address;
 
+	@Column(name="ccNumber")
 	private String ccNumber;
 
 	@Column(name="city_region")
 	private String cityRegion;
 
+	@Column(name="email")
 	private String email;
 
+	@Column(name="name")
 	private String name;
 
+	@Column(name="password")
 	private String password;
 
+	@Column(name="phone")
 	private String phone;
 
+	@Column(name="username")
 	private String username;
 
 	//bi-directional many-to-one association to CustomerOrder

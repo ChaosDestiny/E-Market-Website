@@ -54,6 +54,8 @@ public class ProductServlet extends HttpServlet {
 			PrintWriter out = response.getWriter();
 			Product selectedProduct = (Product) session.getAttribute("selectedProduct");
 			ProductDetail selectedProductDetail = (ProductDetail) session.getAttribute("selectedProductDetail");
+			
+			
 			session.removeAttribute("selectedProduct");
 			session.removeAttribute("selectedProductDetail");
 			productDetailSB.remove(productDetailSB.find(selectedProductDetail.getProductId()));

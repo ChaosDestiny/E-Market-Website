@@ -15,7 +15,6 @@ import javax.persistence.*;
     @NamedQuery(name = "OrderedProduct.findByOrderId", query = "SELECT o FROM OrderedProduct o WHERE o.id.orderId = :orderId"),
     @NamedQuery(name = "OrderedProduct.findByProductId", query = "SELECT o FROM OrderedProduct o WHERE o.id.productId = :productId"),
     @NamedQuery(name = "OrderedProduct.findByQuantity", query = "SELECT o FROM OrderedProduct o WHERE o.quantity = :quantity")})
-
 public class OrderedProduct implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -36,11 +35,11 @@ public class OrderedProduct implements Serializable {
 
 	public OrderedProduct() {
 	}
-	
-	public OrderedProduct(OrderedProductPK orderedProductPK) {
-		this.id = orderedProductPK;
-	}
 
+	public OrderedProduct(OrderedProductPK orderedProductPK) {
+		this.id = orderedProductPK;	
+	}
+	
 	public OrderedProductPK getId() {
 		return this.id;
 	}

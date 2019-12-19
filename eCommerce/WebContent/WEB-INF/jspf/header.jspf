@@ -31,10 +31,9 @@
 	<div id="container">
 		<c:if
 			test="${!empty cart && cart.numberOfItems != 0 && !fn:contains(pageContext.request.servletPath,'/checkout') &&
-			requestScope['javax.servlet.forward.servlet_path']
-			ne '/checkout' &&!fn:contains(pageContext.request.servletPath,'/viewCart') &&
-			requestScope['javax.servlet.forward.servlet_path']
-			ne '/viewCart' &&
+			requestScope['javax.servlet.forward.servlet_path'] ne '/checkout' && 
+			!fn:contains(pageContext.request.servletPath,'/viewCart') &&
+			requestScope['javax.servlet.forward.servlet_path'] ne '/viewCart' &&
 			validationErrorFlag ne true &&
 			orderFailureFlag ne true}">
 			<img src="img/order.png" alt="">
@@ -57,6 +56,9 @@
 				<c:otherwise>items</c:otherwise>
 			</c:choose>
 		</a>
+		
+		<a href="register.jsp" style="text-align:right">Register</a>
+		
 	</div>
 	<div class="header">
 		<div id="site_title">
@@ -68,13 +70,13 @@
 			<li><a href="#">Category</a>
 				<ol>
 					<li><a href="category?1">Mac</a>
-						<ol>
+						<%-- <ol>
 							<li><a href="#">iMac</a></li>
 							<li><a href="#">Mac Pro</a></li>
 							<li><a href="#">Macbook Air</a></li>
 							<li><a href="#">Macbook Pro</a></li>
-						</ol></li>
-
+						</ol> --%>
+					</li>
 					<li><a href="category?3">iPad</a></li>
 					<li><a href="category?2">iPhone</a></li>
 					<li><a href="category?4">Accessories</a></li>

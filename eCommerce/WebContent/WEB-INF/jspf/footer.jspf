@@ -18,8 +18,8 @@
 				<h3>Administrator</h3>
 				<ul class="footer_links">
 					<%
-						String nameisexsit = (String) request.getSession().getAttribute("admin");
-						if (nameisexsit == null) { %>
+						String nameIsExist = (String) request.getSession().getAttribute("admin");
+						if (nameIsExist == null) { %>
 							<li><a href="login.jsp">Login</a></li>
 					<% 	} else { %>
 						<li><a href="index.jsp">Admin</a></li>

@@ -2,13 +2,18 @@
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
-<c:set var='view' value='/checkout' scope='session' />
+<c:set var='view' value='/register' scope='session'/>
 <script src="js/jquery.validate.js" type="text/javascript"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
-		$("#checkoutForm").validate({
+		$("#registrationForm").validate({
 			rules : {
 				name : "required",
+				username : "required",
+				password : {
+					required : true,
+					password : true
+				},
 				email : {
 					required : true,
 					email : true
@@ -29,20 +34,23 @@
 		});
 	});
 </script>
+
 <div id="container">
-	<div class="one-half">
 		<div class="heading_bg">
-			<h2>Checkout</h2>
+			<h2>Register</h2>
 		</div>
 		<p>
-			<strong>In order to purchase the items in your shopping cart, please provide us with the following information:</strong>
+			<strong>Fill in your registration form</strong>
 		</p>
-		<c:if test="${!empty orderFailureFlag}">
-			<p style="color: #c00; font-style: italic">We were unable to process your order. Please try again!</p>
-		</c:if>
-		<form id="checkoutForm" action="<c:url value='purchase' />" method="post">
+		<form id="registrationForm"  action="<c:url value='register'/>" method="post">
 			<fieldset>
 				<label>Name<span class="required">*</span></label> <input type="text" name="name" id="name" value="${param.name}" />
+			</fieldset>
+			<fieldset>
+				<label>User name<span class="required">*</span></label> <input type="text" name="username" id="username" value="${param.username}" />
+			</fieldset>
+			<fieldset>
+				<label>Password<span class="required">*</span></label> <input type="password" name="password" id="password" value="${param.password}" />
 			</fieldset>
 			<fieldset>
 				<label>Email<span class="required">*</span></label> <input type="text" name="email" id="email" value="${param.email}" />
@@ -51,7 +59,7 @@
 				<label>Phone <span class="required">*</span></label> <input type="text" name="phone" id="phone" value="${param.phone}" />
 			</fieldset>
 			<fieldset>
-				<label>Address <span class="required">*</span></label> <input type="text" size="100" name="address" id="address" value="${param.address}" />
+				<label>Address <span class="required">*</span></label> <input type="text" size="45" name="address" id="address" value="${param.address}" />
 			</fieldset>
 			<fieldset>
 				<label>City <span class="required">*</span></label> <input type="text" size="45" name="cityRegion" id="cityRegion" value="${param.cityRegion}" />
@@ -60,31 +68,12 @@
 				<label>Credit Card Number<span class="required">*</span></label> <input type="text" size="45" name="creditcard" id="creditcard" value="${param.creditcard}" />
 			</fieldset>
 			<fieldset>
-				<input value="Submit purchase" class="button white" type="submit">
+				<input value="Submit register" class="button white" type="submit">
 			</fieldset>
 		</form>
-	</div>
-	<div class="one-half last">
-		<div class="heading_bg">
-			<h2>Order Information</h2>
-		</div>
-		<p>
-			<strong>Next-working day delivery is guaranteed</strong>
-		</p>
-		<p>
-			<strong> A <fmt:formatNumber type="currency" currencySymbol="&dollar; " value="${initParam.deliveryFee}" /> delivery surcharge is applied to all purchase orders
-			</strong>
-		</p>
-		<table>
-			<th>Total</th>
-			<th>Delivery Surcharge</th>
-			<th>Credit Total</th>
-			<tr>
-				<td><fmt:formatNumber type="currency" currencySymbol="&dollar; " value="${cart.subtotal}" /></td>
-				<td><fmt:formatNumber type="currency" currencySymbol="&dollar; " value="${initParam.deliveryFee}" /></td>
-				<td><fmt:formatNumber type="currency" currencySymbol="&dollar; " value="${cart.total}" /></td>
-			</tr>
-		</table>
-	</div>
+			<% String userIsExist = (String) request.getSession().getAttribute("userExist");
+			if (userIsExist == null) { %>
+				<div style="color: red">User Name existed!</div>
+	 		<% } %> 
 	<div style="clear: both; height: 40px"></div>
 </div>

@@ -37,29 +37,33 @@
 		                           varStatus="iter">
 		                <tr>
 		                    <td>
-		                        ${products[iter.index].name}
+		                    	${products[iter.index].name}
 		                    </td>
 		                    <td>
-		                        ${orderedProducts.quantity}
+		                    	${orderedProducts.quantity}
 		                    </td>
 		                    <td>
-		                        ${products[iter.index].price * orderedProducts.quantity}
+		                    	<fmt:formatNumber type="currency"
+									currencySymbol="&dollar; " value="${products[iter.index].price * orderedProducts.quantity}" /> 
 		                    </td>
 		                </tr>
 		            </c:forEach>
 		            <tr>
 		                <td colspan="2"><strong>Surcharge:</strong></td>
 		                <td>
-		                    ${initParam.deliveryFee}</td>
+		                	<fmt:formatNumber type="currency"
+									currencySymbol="&dollar; " value="${initParam.deliveryFee}" />
+		                </td>
 		            </tr>
 		            <tr>
 		                <td colspan="2"><strong>Total :</strong></td>
-		                <td>
-		                    ${orderRecord.amount}</td>
+		                <td> <fmt:formatNumber type="currency"
+							currencySymbol="&dollar; " value="${orderRecord.amount}" />
+						</td>
 		            </tr>
 		            <tr>
-		                <td colspan="3"><strong>Date Process :</strong>
-		                        ${orderRecord.dateCreated}
+		                <td colspan="2"><strong>Date Process :</strong>
+		                <td> ${orderRecord.dateCreated}	</td>        
 		            </tr>
 		        </table>
 		    </div>

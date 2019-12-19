@@ -4,14 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 
 /**
@@ -141,7 +134,7 @@ public class ProductDetail implements Serializable {
 	public void setProduct(Product product) {
 		this.product = product;
 	}
-	
+
 	public List<String> getAllImages(){
 		 List<String> images = new ArrayList<String>();
 		 if (image1 != null) images.add(image1);

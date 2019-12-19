@@ -56,6 +56,8 @@
 			<p><%=selectedProduct.getPrice()%>
 				$
 			</p>
+			<h3>Quantity</h3>
+			<p><%=selectedProductDetail.getQuantity()%></p>
 			<p style="text-align: left; margin-right: 16px">
 				<a href="<c:url value='addToCart?${selectedProduct.getProductId()}'/>" class="button">Add to cart</a>
 				<%

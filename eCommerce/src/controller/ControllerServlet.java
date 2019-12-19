@@ -27,7 +27,7 @@ import valid.Validator;
 
 @WebServlet(name = "ControllerServlet", loadOnStartup = 1, urlPatterns = { "/category", "/product", "/addToCart",
 		"/viewCart", "/updateCart", "/checkout", "/purchase", "/login", "/chooseLanguage", "/addproduct", "/logout",
-		"/deleteproduct" })
+		"/deleteproduct"})
 public class ControllerServlet extends HttpServlet {
 
 	@EJB
@@ -144,13 +144,13 @@ public class ControllerServlet extends HttpServlet {
 		if (userPath.equals("/updateCart")) {
 			String productId = request.getParameter("productId");
 			String quantity = request.getParameter("quantity");
-//			boolean invalidEntry = validator.validateQuantity(productId, quantity);
-//			if (!invalidEntry) {
-//				Product product = productSB.find(Integer.parseInt(productId));
-//				cart.update(product, quantity);
-//			}
-			Product product = productSB.find(Integer.parseInt(productId));
-			cart.update(product, quantity);
+			boolean validEntry = validator.validateQuantity(productId, quantity);
+			if (validEntry) {
+				Product product = productSB.find(Integer.parseInt(productId));
+				cart.update(product, quantity);
+			}
+//			Product product = productSB.find(Integer.parseInt(productId));
+//			cart.update(product, quantity);
 			userPath = "/viewCart";
 		}
 		else if (userPath.equals("/purchase")) {
@@ -197,8 +197,6 @@ public class ControllerServlet extends HttpServlet {
 						request.setAttribute("orderRecord", orderMap.get("orderRecord"));
 						request.setAttribute("orderedProducts",	orderMap.get("orderedProducts"));
 						userPath = "/confirmation";
-						
-						
 						
 						// otherwise, send back to checkout page and display error
 					} else {

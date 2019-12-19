@@ -1,6 +1,21 @@
 package valid;
 
+import javax.ejb.EJB;
+
+import entity.Product;
+import entity.ProductDetail;
+import session_bean.CustomerSessionBean;
+import session_bean.ProductDetailSessionBean;
+import session_bean.ProductSessionBean;
+
 public class Validator {
+	@EJB
+	private ProductSessionBean productSB;
+	@EJB
+	private ProductDetailSessionBean productDetailSB;
+	@EJB
+	private CustomerSessionBean customerSB;
+	
 	public Validator() {
 		
 	}
@@ -28,10 +43,10 @@ public class Validator {
 
 		return true;
 	}
+	
 	public boolean validateQuantity(String productId, String quantity) {
-		if (productId == null)
-			return false;
-		if (quantity == null)
+		
+		if (Integer.parseInt(quantity) > 100)
 			return false;
 		return true;
 	}

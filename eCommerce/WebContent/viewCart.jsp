@@ -27,10 +27,11 @@
 							<td>
 								<form action="<c:url value='updateCart'/>" method="post">
 									<input type="hidden" name="productId"
-										value="${product.productId}" /> <input type="text"
-										maxlength="2" size="2" value="${cartItem.quantity}"
-										name="quantity" style="margin: 5px" /> <input type="submit"
-										name="submit" value="update" />
+										value="${product.productId}" /> 
+									<input type="text"
+										maxlength="3" size="3" value="${cartItem.quantity}"
+										name="quantity" style="margin: 5px" /> 
+									<input type="submit" name="submit" value="update" />
 								</form>
 							</td>
 						</tr>
