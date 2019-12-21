@@ -30,6 +30,15 @@ public class CustomerOrder implements Serializable {
 	@Column(name="date_created")
 	private Date dateCreated;
 
+	@Column(name="delivery_address")
+	private String deliveryAddress;
+
+	@Column(name="order_state")
+	private String orderState;
+
+	@Column(name="payment_method")
+	private String paymentMethod;
+
 	//bi-directional many-to-one association to Customer
 	@ManyToOne
 	@JoinColumn(name="customer_id")
@@ -72,6 +81,30 @@ public class CustomerOrder implements Serializable {
 
 	public void setDateCreated(Date dateCreated) {
 		this.dateCreated = dateCreated;
+	}
+
+	public String getDeliveryAddress() {
+		return this.deliveryAddress;
+	}
+
+	public void setDeliveryAddress(String deliveryAddress) {
+		this.deliveryAddress = deliveryAddress;
+	}
+
+	public String getOrderState() {
+		return this.orderState;
+	}
+
+	public void setOrderState(String orderState) {
+		this.orderState = orderState;
+	}
+
+	public String getPaymentMethod() {
+		return this.paymentMethod;
+	}
+
+	public void setPaymentMethod(String paymentMethod) {
+		this.paymentMethod = paymentMethod;
 	}
 
 	public Customer getCustomer() {

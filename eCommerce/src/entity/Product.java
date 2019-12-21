@@ -47,7 +47,7 @@ public class Product implements Serializable {
 	private Category category;
 
 	//bi-directional one-to-one association to ProductDetail
-	@OneToOne(mappedBy="product", cascade={CascadeType.ALL})
+	@OneToOne(mappedBy="product")
 	private ProductDetail productDetail;
 
 	public Product() {

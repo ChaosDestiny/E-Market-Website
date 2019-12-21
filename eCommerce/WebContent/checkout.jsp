@@ -8,27 +8,24 @@
 	$(document).ready(function() {
 		$("#checkoutForm").validate({
 			rules : {
-				name : "required",
-				email : {
-					required : true,
-					email : true
+				deliAdd : {
+					required : true
 				},
-				phone : {
-					required : true,
-					number : true,
-					minlength : 9
-				},
-				address : {
+				pmMethod : {
 					required : true
 				},
 				creditcard : {
 					required : true
 					//creditcard : true
+				},
+				atmcard : {
+					
 				}
 			}
 		});
 	});
 </script>
+<title>Checkout</title>
 <div id="container">
 	<div class="one-half">
 		<div class="heading_bg">
@@ -42,25 +39,25 @@
 		</c:if>
 		<form id="checkoutForm" action="<c:url value='purchase' />" method="post">
 			<fieldset>
-				<label>Name<span class="required">*</span></label> <input type="text" name="name" id="name" value="${param.name}" />
+				<label>Delivery Address <span class="required">*</span></label> <input type="text" size="45" name="deliveryAddress" id="deliAdd" value="${param.address}" />
 			</fieldset>
 			<fieldset>
-				<label>Email<span class="required">*</span></label> <input type="text" name="email" id="email" value="${param.email}" />
+				<label>Credit Card Number <span class="required">*</span></label> <input type="text" size="45" name="creditcard" id="creditcard" value="${param.creditcard}" />
 			</fieldset>
 			<fieldset>
-				<label>Phone <span class="required">*</span></label> <input type="text" name="phone" id="phone" value="${param.phone}" />
+				<label>ATM Card Number <span class="required">*</span></label> <input type="text" size="45" name="atmcard" id="atmcard" value="${param.atmcard}" />
 			</fieldset>
 			<fieldset>
-				<label>Address <span class="required">*</span></label> <input type="text" size="100" name="address" id="address" value="${param.address}" />
+				<label>Payment Method <span class="required">*</span></label> 
+				<select name="paymentMethod" id="pmMethod">
+							<option value="Credit Cards">Credit Cards</option>
+							<option value="Mobile Payments">Mobile Payments</option>
+							<option value="Bank Transfers">Bank Transfers</option>
+							<option value="Cash">Cash</option>			
+				</select>
 			</fieldset>
 			<fieldset>
-				<label>City <span class="required">*</span></label> <input type="text" size="45" name="cityRegion" id="cityRegion" value="${param.cityRegion}" />
-			</fieldset>
-			<fieldset>
-				<label>Credit Card Number<span class="required">*</span></label> <input type="text" size="45" name="creditcard" id="creditcard" value="${param.creditcard}" />
-			</fieldset>
-			<fieldset>
-				<input value="Submit purchase" class="button white" type="submit">
+				<input value="Purchase" class="button white" type="submit">
 			</fieldset>
 		</form>
 	</div>

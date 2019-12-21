@@ -2,6 +2,7 @@ package valid;
 
 import javax.ejb.EJB;
 
+import cart.ShoppingCart;
 import entity.Product;
 import entity.ProductDetail;
 import session_bean.CustomerSessionBean;
@@ -27,28 +28,10 @@ public class Validator {
 		    return false;  
 		  }  
 		}
-	public boolean validateForm(String name, String email, String phone, String address, String cityRegion, String ccNumber) {
-		if (name == null)
-			return false;
-		if (email == null)
-			return false;
-		if (phone == null)
-			return false;
-		if (address == null)
-			return false;
-		if (cityRegion == null)
-			return false;
-		if (ccNumber == null)
-			return false;
-
+	
+	public boolean validateForm(String deliveryAddress, String paymentMethod, String ccNumber, String acNumber,
+			ShoppingCart cart) {
+		// TODO Auto-generated method stub
 		return true;
 	}
-	
-	public boolean validateQuantity(String productId, String quantity) {
-		
-		if (Integer.parseInt(quantity) > 100)
-			return false;
-		return true;
-	}
-	
 }

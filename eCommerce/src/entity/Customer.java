@@ -10,8 +10,9 @@ import java.util.List;
  * 
  */
 @Entity
-
-@NamedQuery(name = "Customer.findAll", query = "SELECT c FROM Customer c")
+@NamedQueries({
+	@NamedQuery(name = "Customer.findAll", query="SELECT c FROM Customer c"),
+    @NamedQuery(name = "Customer.findByUsername", query = "SELECT c FROM Customer c WHERE c.username = :username")})
 
 public class Customer implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -23,8 +24,11 @@ public class Customer implements Serializable {
 	@Column(name="address")
 	private String address;
 
-	@Column(name="ccNumber")
+	@Column(name="cc_number")
 	private String ccNumber;
+	
+	@Column(name="ac_number")
+	private String acNumber;
 
 	@Column(name="city_region")
 	private String cityRegion;
@@ -73,6 +77,14 @@ public class Customer implements Serializable {
 
 	public void setCcNumber(String ccNumber) {
 		this.ccNumber = ccNumber;
+	}
+
+	public String getAcNumber() {
+		return acNumber;
+	}
+
+	public void setAcNumber(String acNumber) {
+		this.acNumber = acNumber;
 	}
 
 	public String getCityRegion() {

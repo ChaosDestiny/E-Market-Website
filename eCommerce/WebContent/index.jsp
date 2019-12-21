@@ -20,6 +20,7 @@
 	});
 </script>
 <c:set var='view' value='/index' scope='session' />
+<title>Tini</title>
 <div id="container">
 	<h2>Best Seller</h2>
 	<div id="prod_wrapper">

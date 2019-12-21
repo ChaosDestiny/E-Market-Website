@@ -29,37 +29,41 @@
 </head>
 <body>
 	<div id="container">
-		<c:if
-			test="${!empty cart && cart.numberOfItems != 0 && !fn:contains(pageContext.request.servletPath,'/checkout') &&
-			requestScope['javax.servlet.forward.servlet_path'] ne '/checkout' && 
-			!fn:contains(pageContext.request.servletPath,'/viewCart') &&
-			requestScope['javax.servlet.forward.servlet_path'] ne '/viewCart' &&
-			validationErrorFlag ne true &&
-			orderFailureFlag ne true}">
-			<img src="img/order.png" alt="">
-			<a href="<c:url value='checkout'/>"> 
-			Checkout
+			<a href="<c:url value='viewCart'/>"> 
+				<c:choose>
+					<c:when test="${cart.numberOfItems == null || cart.numberOfItems == 0}">
+						<img src="img/shopping-cart.png" alt=""> 0
+					</c:when>
+					<c:otherwise>
+						<img src="img/checkout.png" alt=""> ${cart.numberOfItems}
+					</c:otherwise>
+				</c:choose> 
+				<c:choose>
+					<c:when test="${cart.numberOfItems == 1 || cart.numberOfItems == 0}">item</c:when>
+					<c:otherwise>items</c:otherwise>
+				</c:choose>
 			</a>
-		</c:if>
-
-		<a href="<c:url value='viewCart'/>"> 
-			<c:choose>
-				<c:when test="${cart.numberOfItems == null}">
-					<img src="img/shopping-cart.png" alt=""> 0
-				</c:when>
-				<c:otherwise>
-					<img src="img/checkout.png" alt=""> ${cart.numberOfItems}
-				</c:otherwise>
-			</c:choose> 
-			<c:choose>
-				<c:when test="${cart.numberOfItems == 1}">item</c:when>
-				<c:otherwise>items</c:otherwise>
-			</c:choose>
-		</a>
-		
-		<a href="register.jsp" style="text-align:right">Register</a>
-		
+				
+			<c:if
+				test="${!empty cart && cart.numberOfItems != 0 && !fn:contains(pageContext.request.servletPath,'/checkout') &&
+				requestScope['javax.servlet.forward.servlet_path'] ne '/checkout' && 
+				!fn:contains(pageContext.request.servletPath,'/viewCart') &&
+				requestScope['javax.servlet.forward.servlet_path'] ne '/viewCart' &&
+				validationErrorFlag ne true &&
+				orderFailureFlag ne true}">
+				<img src="img/order.png" alt="">
+				<% 	String adminSsHeader = (String) request.getSession().getAttribute("admin");
+				String customerSsHeader = (String) request.getSession().getAttribute("customer"); 
+				if (adminSsHeader != null || customerSsHeader != null) {%>
+						<a href="<c:url value='checkout'/>">Checkout</a>
+				<% } else { %>
+						<a href="login.jsp">Checkout</a>
+				<% } %>
+			</c:if>
+			
+			<a href="signUp.jsp" style="text-align: right; margin-right: 16px">Sign Up</a>
 	</div>
+	
 	<div class="header">
 		<div id="site_title">
 			<img src="./img/logo.png" alt=""><br>
@@ -81,6 +85,22 @@
 					<li><a href="category?2">iPhone</a></li>
 					<li><a href="category?4">Accessories</a></li>
 				</ol></li>
+			<% 	String adminSsHeader = (String) request.getSession().getAttribute("admin");
+				String customerSsHeader = (String) request.getSession().getAttribute("customer"); 
+				if (adminSsHeader != null || customerSsHeader != null) {%>
+				<li><a href="<c:url value='profile'/>">Profile</a></li>
+				<li><a href="pendingOrder.jsp">Orders</a></li>
+			<%	} %>
+			<% 	adminSsHeader = (String) request.getSession().getAttribute("admin");
+				customerSsHeader = (String) request.getSession().getAttribute("customer"); 
+				if (adminSsHeader != null) {%>
+				<li><a href="#">Management</a>
+					<ol>
+						<li><a href="orderList.jsp">Order List</a></li>
+						<li><a href="customerList.jsp">Customer List</a></li>
+					</ol>
+				</li>
+			<%} %>
 		</ol>
 	</div>
 </body>

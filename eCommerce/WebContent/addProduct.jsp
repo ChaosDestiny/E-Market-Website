@@ -13,11 +13,9 @@
 <title>Add Product</title>
 
 <!-- CSS -->
-<link rel="stylesheet" type="text/css" media="screen"
-	href="css/screen.css" />
+<link rel="stylesheet" type="text/css" media="screen"href="css/screen.css" />
 <link rel="stylesheet" href="css/style.css" />
 <link rel="stylesheet" type="text/css" media="screen" href="css/ie.css" />
-
 
 <!-- JS -->
 <script type="text/javascript" src="js/jquery-1.3.2.min.js"></script>
@@ -223,6 +221,10 @@
 							name="guaranty" id="" required />
 					</div>
 
+					<div>
+						<label for="name_first">Quantity: </label> <input type="text"
+							name="quantity" id="" required />
+					</div>
 
 
 					<!-- Controls -->

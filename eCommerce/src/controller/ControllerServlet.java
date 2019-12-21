@@ -17,17 +17,19 @@ import javax.servlet.http.HttpSession;
 
 import cart.ShoppingCart;
 import entity.Category;
+import entity.Customer;
 import entity.Product;
 import entity.ProductDetail;
 import session_bean.CategorySessionBean;
+import session_bean.CustomerOrderSessionBean;
+import session_bean.CustomerSessionBean;
 import session_bean.OrderManager;
 import session_bean.ProductDetailSessionBean;
 import session_bean.ProductSessionBean;
 import valid.Validator;
 
 @WebServlet(name = "ControllerServlet", loadOnStartup = 1, urlPatterns = { "/category", "/product", "/addToCart",
-		"/viewCart", "/updateCart", "/checkout", "/purchase", "/login", "/chooseLanguage", "/addproduct", "/logout",
-		"/deleteproduct"})
+		"/viewCart", "/updateCart", "/checkout", "/purchase", "/chooseLanguage", "/logout"})
 public class ControllerServlet extends HttpServlet {
 
 	@EJB
@@ -40,12 +42,18 @@ public class ControllerServlet extends HttpServlet {
 	private ProductDetailSessionBean productDetailSB;
 	@EJB
 	private OrderManager orderManager;
+	@EJB
+	private CustomerOrderSessionBean customerOrderSB;
+	@EJB
+	private CustomerSessionBean customerSB;
 	
 	@Override
 	public void init(ServletConfig servletConfig) throws ServletException {
 		super.init(servletConfig);
 		getServletContext().setAttribute("newProducts", productSB.findRange(new int[] { 0, 5 }));
 		getServletContext().setAttribute("categories", categorySB.findAll());
+		getServletContext().setAttribute("customerOrderList", customerOrderSB.findAll());
+		getServletContext().setAttribute("customerList", customerSB.findAll());
 	}
 
 	@Override
@@ -75,9 +83,8 @@ public class ControllerServlet extends HttpServlet {
 				session.setAttribute("selectedProductDetail", selectedProductDetail);
 			}
 		} else if (userPath.equals("/logout")) {
-			HttpSession session1 = request.getSession();
-			session1.removeAttribute("admin");
-			session1.removeAttribute("check");
+//			HttpSession session = request.getSession();
+			session.invalidate();
 			request.getRequestDispatcher("index.jsp").forward(request, response);
 			return;
 		} else if (userPath.equals("/viewCart")) {
@@ -102,7 +109,6 @@ public class ControllerServlet extends HttpServlet {
 			}
 			String userView = (String) session.getAttribute("view");
 			userPath = String.valueOf(userView);
-
 		}
 
 		String url = userPath.trim() + ".jsp";
@@ -117,24 +123,6 @@ public class ControllerServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
-		if (request.getParameter("username") != null) {
-			String name = request.getParameter("username");
-			String password = request.getParameter("pass");
-			String check = new String("Ok");
-			if (name.equals("admin") && password.equals("admin")) {
-				HttpSession session = request.getSession();
-				session.setAttribute("admin", name);
-
-				request.getRequestDispatcher("index.jsp").include(request, response);
-				return;
-			} else {
-				HttpSession session = request.getSession();
-				session.setAttribute("check", check);
-				request.getRequestDispatcher("login.jsp").forward(request, response);
-				;
-			}
-		}
-		
 		request.setCharacterEncoding("UTF-8");
 		String userPath = request.getRequestURI().substring(request.getContextPath().length());
 		HttpSession session = request.getSession();
@@ -144,32 +132,29 @@ public class ControllerServlet extends HttpServlet {
 		if (userPath.equals("/updateCart")) {
 			String productId = request.getParameter("productId");
 			String quantity = request.getParameter("quantity");
-			boolean validEntry = validator.validateQuantity(productId, quantity);
-			if (validEntry) {
+			if (validateQuantity(productId, quantity)) {
 				Product product = productSB.find(Integer.parseInt(productId));
 				cart.update(product, quantity);
 			}
-//			Product product = productSB.find(Integer.parseInt(productId));
-//			cart.update(product, quantity);
 			userPath = "/viewCart";
 		}
 		else if (userPath.equals("/purchase")) {
 			if (cart != null) {
-				String name = request.getParameter("name");
-				String email = request.getParameter("email");
-				String phone = request.getParameter("phone");
-				String address = request.getParameter("address");
-				String cityRegion = request.getParameter("cityRegion");
+				Customer user = (Customer) session.getAttribute("user");
+				String deliveryAddress = request.getParameter("deliveryAddress");
+				String paymentMethod = request.getParameter("paymentMethod");
 				String ccNumber = request.getParameter("creditcard");
+				String acNumber = request.getParameter("atmcard");
+				String orderState = "Ordered";
 				
 				boolean validationErrorFlag = false;
-				validationErrorFlag = validator.validateForm(name, email, phone, address, cityRegion, ccNumber);
+				validationErrorFlag = validator.validateForm(deliveryAddress, paymentMethod, ccNumber, acNumber, cart);
 				if (!validationErrorFlag) {
 					request.setAttribute("validationErrorFlag",	validationErrorFlag);
 					userPath = "/checkout";
 				}
 				else {
-					int orderId = orderManager.placeOrder(name, email, phone, address, cityRegion, ccNumber, cart);
+					int orderId = orderManager.placeOrder(user, deliveryAddress, paymentMethod, ccNumber, acNumber, orderState, cart);
 					if (orderId != 0) {
 						// in case language was set using toggle, get language choice before destroying session
 						Locale locale = (Locale) session.getAttribute("javax.servlet.jsp.jstl.fmt.locale.session");
@@ -177,18 +162,19 @@ public class ControllerServlet extends HttpServlet {
 						if (locale != null) {
 							language = (String) locale.getLanguage();
 						}
-			
 						if (!language.isEmpty()) { //if user changed language using the toggle,
 						// reset the language attribute - otherwise
 						request.setAttribute("language", language); //language will be switched on confirmation page!
 						}
-						// get order details
-			
+
 						// dissociate shopping cart from session
 						cart = null;
 						// end session
 						session.invalidate();
+						session = request.getSession();
+						session.setAttribute("user", user);
 						
+						// get order details
 						Map orderMap = orderManager.getOrderDetails(orderId);
 			
 						// place order details in request scope
@@ -214,4 +200,12 @@ public class ControllerServlet extends HttpServlet {
 			ex.printStackTrace();
 		}
 	}
+	
+	public boolean validateQuantity(String productId, String quantity) {
+		ProductDetail productDetail = productDetailSB.find(Integer.parseInt(productId));
+		if (Integer.parseInt(quantity) > productDetail.getQuantity())
+			return false;
+		return true;
+	}
+	
 }

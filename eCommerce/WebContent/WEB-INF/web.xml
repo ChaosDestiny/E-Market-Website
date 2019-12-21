@@ -33,7 +33,13 @@
 			<url-pattern>/viewCart.jsp</url-pattern>
 			<url-pattern>/checkout.jsp</url-pattern>
 			<url-pattern>/confirmation.jsp</url-pattern>
-			<url-pattern>/register.jsp</url-pattern>
+			<url-pattern>/signUp.jsp</url-pattern>
+			<url-pattern>/profile.jsp</url-pattern>
+			<url-pattern>/purchaseHistory.jsp</url-pattern>
+			<url-pattern>/pendingOrder.jsp</url-pattern>
+			<url-pattern>/orderList.jsp</url-pattern>
+			<url-pattern>/customerList.jsp</url-pattern>
+			<url-pattern>/viewPrf.jsp</url-pattern>
 			<!--Other sites -->
 			<include-prelude>/WEB-INF/jspf/header.jspf</include-prelude>
 			<include-coda>/WEB-INF/jspf/footer.jspf</include-coda>

@@ -6,13 +6,12 @@
 	//session.setAttribute("view", "/product ");
 	Product selectedProduct = (Product) session.getAttribute("selectedProduct");
 	ProductDetail selectedProductDetail = (ProductDetail) session.getAttribute("selectedProductDetail");
-
 %>
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
         <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
-        <title>Edit Profile</title>
+        <title>Edit Product</title>
 
         <!-- CSS -->
         <link rel="stylesheet" type="text/css" media="screen" href="css/screen.css" />
@@ -27,7 +26,8 @@
     </head>
     <body id="edit-profile">
         <!-- Container -->    
-        <div id="container"><div id="container-inner">
+        	<div id="container">
+        	<div id="container-inner">
 
                 <h1>Edit Product</h1>
                 <form action="<c:url value='editProduct'/>" method="post">
@@ -188,7 +188,7 @@
 						</select>
 					</div>
 				</fieldset>
-                        
+       
                         <div>
                         	<label for="category">Category:</label>
                         	<select name="category_id" id="">
@@ -219,7 +219,10 @@
                             <input type="text" name="guaranty" id="" value="<%=selectedProductDetail.getGuaranty()%>"/>
                         </div>
                         
-                        
+                        <div>
+                            <label for="name_first">Quantity: </label>
+                            <input type="text" name="quantity" id="" value="<%=selectedProductDetail.getQuantity()%>"/>
+                        </div>
 
                         <!-- Controls -->
                         
@@ -228,7 +231,10 @@
                     </fieldset>
                 </form>
 
-            </div></div>	<!-- /Container -->
+            </div>
+        </div>
+        
+        <!-- /Container -->
 
     </body>
 </html>

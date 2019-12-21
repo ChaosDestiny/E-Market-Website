@@ -144,5 +144,4 @@ public class ProductDetail implements Serializable {
 		 if (image5 != null) images.add(image5);
 		 return images;
 	}
-
 }

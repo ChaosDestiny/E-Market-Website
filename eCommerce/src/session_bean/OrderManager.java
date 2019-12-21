@@ -48,11 +48,10 @@ public class OrderManager {
 	private SessionContext context;
 
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public int placeOrder(String name, String email, String phone, String address, String cityRegion, String ccNumber,
-			ShoppingCart cart) {
+	public int placeOrder(Customer user, String deliveryAddress, String paymentMethod, String ccNumber, 
+			String acNumber, String orderState, ShoppingCart cart) {
 		try {
-			Customer customer = addCustomer(name, email, phone, address, cityRegion, ccNumber);
-			CustomerOrder order = addOrder(customer, cart);
+			CustomerOrder order = addOrder(user, deliveryAddress, paymentMethod, orderState, cart);
 			addOrderedItems(order, cart);
 			return order.getOrderId();
 		} catch (Exception e) {
@@ -74,22 +73,25 @@ public class OrderManager {
 		customer.setAddress(address);
 		customer.setCityRegion(cityRegion);
 		customer.setCcNumber(ccNumber);
-		customerSB.create(customer);
-		return customerSB.find(customer.getCustomerId());
+		return customer;
 	}
 
-	public CustomerOrder addOrder(Customer customer, ShoppingCart cart) {
+	public CustomerOrder addOrder(Customer customer, String deliveryAddress, String paymentMethod, 
+			String orderState, ShoppingCart cart) {
 		// set up customer order
 		CustomerOrder order = new CustomerOrder();
 		int id = customerOrderSB.findAll().size() + 1;
         order.setOrderId(id);
 		order.setCustomer(customer);
+		order.setDeliveryAddress(deliveryAddress);
+		order.setOrderState(orderState);
+		order.setPaymentMethod(paymentMethod);
 		cart.calculateTotal("5");
 		order.setAmount(BigDecimal.valueOf(cart.getTotal()));
 		
 		// create confirmation number
 		Random random = new Random();
-		int i = random.nextInt(1000);
+		int i = random.nextInt(1000000000);
 		order.setConfirmationNumber(i);
 
 		//		DateFormat df = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
@@ -112,7 +114,7 @@ public class OrderManager {
 	            orderedProductPK.setProductId(productId); 
 	 
 	            // create ordered item using PK object             
-	            OrderedProduct orderedItem = new OrderedProduct(orderedProductPK); 
+	            OrderedProduct orderedItem = new OrderedProduct(orderedProductPK);
 	            orderedItem.setCustomerOrder(order);
 	            orderedItem.setProduct(productSB.find(productId));
 	            

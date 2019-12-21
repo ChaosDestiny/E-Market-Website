@@ -3,6 +3,7 @@
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <c:set var='view' value='/viewCart' scope='session' />
+<title>Shopping Cart</title>
 <div id="container">
 	<div class="one">
 		<div class="heading_bg">
@@ -83,8 +84,13 @@ user to previously viewed category --%>
 				<c:url var="url" value="${value}" />
 				<li><a href="${url}">&#x279f; Continue shopping</a></li>
 				<c:if test="${!empty cart && cart.numberOfItems != 0}">
-					<li><a href="<c:url value='checkout'/>">Proceed to
-							checkout</a></li>
+					<% 	String adminSsCart = (String) request.getSession().getAttribute("admin");
+					String customerSsCart = (String) request.getSession().getAttribute("customer"); 
+					if (adminSsCart != null || customerSsCart != null) {%>
+							<li><a href="<c:url value='checkout'/>">Proceed to checkout</a></li>
+					<% } else { %>
+							<li><a href="login.jsp">Proceed to checkout</a></li>
+					<% } %>
 				</c:if>
 			</ul>
 		</div>
