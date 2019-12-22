@@ -51,6 +51,10 @@ public class Customer implements Serializable {
 	//bi-directional many-to-one association to CustomerOrder
 	@OneToMany(mappedBy="customer")
 	private List<CustomerOrder> customerOrders;
+	
+	//bi-directional many-to-one association to AddressBook
+	@OneToMany(mappedBy="customer")
+	private List<AddressBook> addressBooks;
 
 	public Customer() {
 	}
@@ -157,4 +161,24 @@ public class Customer implements Serializable {
 		return customerOrder;
 	}
 
+	public List<AddressBook> getAddressBooks() {
+		return this.addressBooks;
+	}
+
+	public void setAddressBooks(List<AddressBook> addressBooks) {
+		this.addressBooks = addressBooks;
+	}
+	public AddressBook addAddressBook(AddressBook addressBook) {
+		getAddressBooks().add(addressBook);
+		addressBook.setCustomer(this);
+
+		return addressBook;
+	}
+
+	public AddressBook removeAddressBook(AddressBook addressBook) {
+		getAddressBooks().remove(addressBook);
+		addressBook.setCustomer(null);
+
+		return addressBook;
+	}
 }

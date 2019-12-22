@@ -108,6 +108,27 @@ LOCK TABLES `customer_order` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `address_book`
+--
+
+CREATE TABLE `address_book` (
+  `address_id` INT NOT NULL AUTO_INCREMENT,
+  `customer_id` INT(11) NOT NULL,
+  `phone` VARCHAR(255) NULL,
+  `address` VARCHAR(255) NULL,
+  `city` VARCHAR(255) NULL,
+  PRIMARY KEY (`address_id`),
+  KEY `customer_id_idx` (`customer_id`),
+  CONSTRAINT `customer_address_id`
+    FOREIGN KEY (`customer_id`)
+    REFERENCES `emarket`.`customer` (`customer_id`)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8
+COLLATE = utf8_bin;
+
+--
 -- Table structure for table `ordered_product`
 --
 

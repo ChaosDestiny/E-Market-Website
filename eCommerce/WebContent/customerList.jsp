@@ -6,6 +6,8 @@
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
+<% List<Customer> ctmList = (List<Customer>) session.getAttribute("ctmList");
+%>
 <title>Customer List</title>
 <div id="container">
 	<div class="container-inner">
@@ -19,7 +21,7 @@
 	             	<th>Username</th>
 	             	<th>Name</th>
 					<th>Email</th>
-	             	<c:forEach var="customer" items="${customerList}" varStatus="iter">
+	             	<c:forEach var="customer" items="<%=ctmList%>" varStatus="iter">
 		             	<tr>
 		             		<td><a href="<c:url value='viewPrf?${customer.getUsername()}'/>">
 		             			${customer.getUsername()}</a></td>

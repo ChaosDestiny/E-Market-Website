@@ -42,10 +42,10 @@
 					minlength : 9
 				},
 				address : {
-					//required : true
+					required : true
 				},
 				cityRegion : {
-					//required : true
+					required : true
 				},
 				creditcard : {
 					//required : true
@@ -108,14 +108,14 @@
 					</div>
 					<div class="wrap-input100 validate-input m-b-18"
 						data-validate="Address is required">
-						<span class="label-input100">Address</span> <input
+						<span class="label-input100">Address<span class="required">*</span></span> <input
 							class="input100" type="text" name="address" id="address"
 							placeholder="Enter your address"> <span
 							class="focus-input100"></span>
 					</div>
 					<div class="wrap-input100 validate-input m-b-18"
 						data-validate="City is required">
-						<span class="label-input100">City</span> <input
+						<span class="label-input100">City<span class="required">*</span></span> <input
 							class="input100" type="text" name="cityRegion" id="cityRegion"
 							placeholder="Enter your city"> <span
 							class="focus-input100"></span>

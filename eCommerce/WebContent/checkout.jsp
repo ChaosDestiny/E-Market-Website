@@ -2,12 +2,17 @@
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
+<%@page import="entity.Customer"%>
+
 <c:set var='view' value='/checkout' scope='session' />
 <script src="js/jquery.validate.js" type="text/javascript"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
 		$("#checkoutForm").validate({
 			rules : {
+				username : {
+					required : true
+				},
 				deliAdd : {
 					required : true
 				},
@@ -38,14 +43,30 @@
 			<p style="color: #c00; font-style: italic">We were unable to process your order. Please try again!</p>
 		</c:if>
 		<form id="checkoutForm" action="<c:url value='purchase' />" method="post">
+			<% 	String adminSsCheckout = (String) request.getSession().getAttribute("admin");
+				Customer currUser = (Customer) session.getAttribute("user");
+				if (adminSsCheckout != null) {%>
+					<fieldset>
+						<label>User Name <span class="required">*</span></label> 
+						<input type="text" size="45" name="username" id="username" value="<%=currUser.getUsername()%>" />
+					</fieldset>
+			<% } else {%>
+					<fieldset>
+						<label>User Name <span class="required">*</span></label> 
+						<input type="text" size="45" name="username" id="username" value="<%=currUser.getUsername()%>" readonly/>
+					</fieldset>
+			<% } %>
 			<fieldset>
-				<label>Delivery Address <span class="required">*</span></label> <input type="text" size="45" name="deliveryAddress" id="deliAdd" value="${param.address}" />
+				<label>Delivery Address <span class="required">*</span></label> 
+				<input type="text" size="45" name="deliveryAddress" id="deliAdd" value="<%=currUser.getAddress()%>" />
 			</fieldset>
 			<fieldset>
-				<label>Credit Card Number <span class="required">*</span></label> <input type="text" size="45" name="creditcard" id="creditcard" value="${param.creditcard}" />
+				<label>Credit Card Number <span class="required">*</span></label> 
+				<input type="text" size="45" name="creditcard" id="creditcard" value="<%=currUser.getCcNumber()%>" />
 			</fieldset>
 			<fieldset>
-				<label>ATM Card Number <span class="required">*</span></label> <input type="text" size="45" name="atmcard" id="atmcard" value="${param.atmcard}" />
+				<label>ATM Card Number <span class="required">*</span></label> 
+				<input type="text" size="45" name="atmcard" id="atmcard" value="<%=currUser.getAcNumber()%>" />
 			</fieldset>
 			<fieldset>
 				<label>Payment Method <span class="required">*</span></label> 

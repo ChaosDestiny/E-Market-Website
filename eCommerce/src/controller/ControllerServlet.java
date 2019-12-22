@@ -52,8 +52,8 @@ public class ControllerServlet extends HttpServlet {
 		super.init(servletConfig);
 		getServletContext().setAttribute("newProducts", productSB.findRange(new int[] { 0, 5 }));
 		getServletContext().setAttribute("categories", categorySB.findAll());
-		getServletContext().setAttribute("customerOrderList", customerOrderSB.findAll());
-		getServletContext().setAttribute("customerList", customerSB.findAll());
+//		getServletContext().setAttribute("customerOrderList", customerOrderSB.findAll());
+//		getServletContext().setAttribute("customerList", customerSB.findAll());
 	}
 
 	@Override
@@ -140,55 +140,60 @@ public class ControllerServlet extends HttpServlet {
 		}
 		else if (userPath.equals("/purchase")) {
 			if (cart != null) {
-				Customer user = (Customer) session.getAttribute("user");
-				String deliveryAddress = request.getParameter("deliveryAddress");
-				String paymentMethod = request.getParameter("paymentMethod");
-				String ccNumber = request.getParameter("creditcard");
-				String acNumber = request.getParameter("atmcard");
-				String orderState = "Ordered";
-				
-				boolean validationErrorFlag = false;
-				validationErrorFlag = validator.validateForm(deliveryAddress, paymentMethod, ccNumber, acNumber, cart);
-				if (!validationErrorFlag) {
-					request.setAttribute("validationErrorFlag",	validationErrorFlag);
-					userPath = "/checkout";
-				}
-				else {
-					int orderId = orderManager.placeOrder(user, deliveryAddress, paymentMethod, ccNumber, acNumber, orderState, cart);
-					if (orderId != 0) {
-						// in case language was set using toggle, get language choice before destroying session
-						Locale locale = (Locale) session.getAttribute("javax.servlet.jsp.jstl.fmt.locale.session");
-						String language = "";
-						if (locale != null) {
-							language = (String) locale.getLanguage();
-						}
-						if (!language.isEmpty()) { //if user changed language using the toggle,
-						// reset the language attribute - otherwise
-						request.setAttribute("language", language); //language will be switched on confirmation page!
-						}
-
-						// dissociate shopping cart from session
-						cart = null;
-						// end session
-						session.invalidate();
-						session = request.getSession();
-						session.setAttribute("user", user);
-						
-						// get order details
-						Map orderMap = orderManager.getOrderDetails(orderId);
-			
-						// place order details in request scope
-						request.setAttribute("customer", orderMap.get("customer"));
-						request.setAttribute("products", orderMap.get("products"));
-						request.setAttribute("orderRecord", orderMap.get("orderRecord"));
-						request.setAttribute("orderedProducts",	orderMap.get("orderedProducts"));
-						userPath = "/confirmation";
-						
-						// otherwise, send back to checkout page and display error
-					} else {
+				String username = request.getParameter("username");
+				if (isUserExist(username)) {
+					Customer user = (Customer) session.getAttribute("user");
+					Customer orderUser = customerSB.findByUsername(username);
+					String deliveryAddress = request.getParameter("deliveryAddress");
+					String paymentMethod = request.getParameter("paymentMethod");
+					String ccNumber = request.getParameter("creditcard");
+					String acNumber = request.getParameter("atmcard");
+					String orderState = "Ordered";
+					
+					boolean validationErrorFlag = false;
+					validationErrorFlag = validator.validateForm(deliveryAddress, paymentMethod, ccNumber, acNumber, cart);
+					if (!validationErrorFlag) {
+						request.setAttribute("validationErrorFlag",	validationErrorFlag);
 						userPath = "/checkout";
-						request.setAttribute("orderFailureFlag", true);
 					}
+					else {
+						int orderId = orderManager.placeOrder(orderUser, deliveryAddress, paymentMethod, ccNumber, acNumber, orderState, cart);
+						if (orderId != 0) {
+							// in case language was set using toggle, get language choice before destroying session
+							Locale locale = (Locale) session.getAttribute("javax.servlet.jsp.jstl.fmt.locale.session");
+							String language = "";
+							if (locale != null) {
+								language = (String) locale.getLanguage();
+							}
+							if (!language.isEmpty()) { //if user changed language using the toggle,
+							// reset the language attribute - otherwise
+							request.setAttribute("language", language); //language will be switched on confirmation page!
+							}
+	
+							// dissociate shopping cart from session
+							cart = null;
+							// end session
+							session.removeAttribute("cart");
+							// get order details
+							Map orderMap = orderManager.getOrderDetails(orderId);
+				
+							// place order details in request scope
+							request.setAttribute("customer", orderMap.get("customer"));
+							request.setAttribute("products", orderMap.get("products"));
+							request.setAttribute("orderRecord", orderMap.get("orderRecord"));
+							request.setAttribute("orderedProducts",	orderMap.get("orderedProducts"));
+							userPath = "/confirmation";
+							
+							// otherwise, send back to checkout page and display error
+						} else {
+							userPath = "/checkout";
+							request.setAttribute("orderFailureFlag", true);
+						}
+					}
+				} else {
+					String errUsername = "errUsername";
+					session.setAttribute("errUsername", errUsername);
+					userPath = "checkout";
 				}
 			}
 		}
@@ -208,4 +213,13 @@ public class ControllerServlet extends HttpServlet {
 		return true;
 	}
 	
+	public boolean isUserExist(String username) {
+		List<Customer> cus = customerSB.findAll();
+		for (Customer c : cus) {
+			if (c.getUsername().contentEquals(username)) {
+				return true;
+			}
+		}
+		return false;
+	}
 }

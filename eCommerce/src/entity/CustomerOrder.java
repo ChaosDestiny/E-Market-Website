@@ -13,7 +13,9 @@ import java.util.List;
  */
 @Entity
 @Table(name="customer_order")
-@NamedQuery(name="CustomerOrder.findAll", query="SELECT c FROM CustomerOrder c")
+@NamedQueries({
+	@NamedQuery(name="CustomerOrder.findAll", query="SELECT c FROM CustomerOrder c"),
+    @NamedQuery(name = "CustomerOrder.findByCustomer", query = "SELECT c FROM CustomerOrder c WHERE c.customer = :customer")})
 public class CustomerOrder implements Serializable {
 	private static final long serialVersionUID = 1L;
 

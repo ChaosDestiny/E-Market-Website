@@ -12,7 +12,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import entity.AddressBook;
 import entity.Customer;
+import session_bean.AddressBookSessionBean;
 import session_bean.CustomerSessionBean;
 
 /**
@@ -24,6 +26,8 @@ public class SignUpServlet extends HttpServlet {
        
 	@EJB
 	private CustomerSessionBean customerSB;
+	@EJB
+	private AddressBookSessionBean addressBookSB;
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -70,9 +74,11 @@ public class SignUpServlet extends HttpServlet {
 				userPath = "/signUp";
 			}
 			else {
-				customerSB.addCustomer(name, username, password, email, phone, 
+				Customer newCtm = customerSB.addCustomer(name, username, password, email, phone, 
 						address, cityRegion, ccNumber, acNumber);
-				
+				AddressBook addressBook = addressBookSB.addAddressBook(newCtm, address, cityRegion, phone);
+				newCtm.addAddressBook(addressBook);
+				customerSB.edit(newCtm);
 				out.print("<script type=\"text/javascript\">\r\n" + "		alert('Sign Up successfully!');\r\n"
 						+ "	</script>");
 				

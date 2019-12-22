@@ -21,7 +21,7 @@ import session_bean.CustomerOrderSessionBean;
 /**
  * Servlet implementation class AdminServlet
  */
-@WebServlet(name = "/AdminServlet", urlPatterns = { "/customerList", "/orderList", "/viewPrf"})
+@WebServlet(name = "/AdminServlet", urlPatterns = { "/customerList", "/orderList", "/viewPrf", "/updateOrder"})
 public class AdminServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -45,19 +45,37 @@ public class AdminServlet extends HttpServlet {
 		String userPath = request.getRequestURI().substring(request.getContextPath().length());
 		HttpSession session = request.getSession();
 		
-		if (userPath.equals("/customerList")) {
-			List<Customer> cus = customerSB.findAll();
-			session.setAttribute("ctmList", cus);
+		if (userPath.equals("/customerList") || userPath.equals("/customerList.jsp")) {
+			Customer user  = (Customer) session.getAttribute("user");
+			if (user != null && user.getUsername().contentEquals("admin")) {
+				List<Customer> cus = customerSB.findAll();
+				request.setAttribute("customerList", cus);
+				session.setAttribute("ctmList", cus);
+				userPath = "customerList";
+			} else {
+				userPath = "requestNA";
+			}
 		}
-		else if (userPath.equals("/orderList")) {
-			List<CustomerOrder> ctmOrders = customerOrderSB.findAll();
-			session.setAttribute("ctmOrders", ctmOrders);
-			userPath = "orderList";
+		else if (userPath.equals("/orderList") || userPath.equals("/orderList.jsp")) {
+			Customer user  = (Customer) session.getAttribute("user");
+			if (user != null && user.getUsername().contentEquals("admin")) {
+				List<CustomerOrder> ctmOrders = customerOrderSB.findAll();
+				session.setAttribute("ctmOrders", ctmOrders);
+				request.setAttribute("customerOrderList", ctmOrders);
+				userPath = "orderList";
+			} else {
+				userPath = "requestNA";
+			}
 		}
-		else if (userPath.equals("/viewPrf")) {
-			String viewUsername = request.getQueryString();
-			Customer viewUser = customerSB.findByUsername(viewUsername);
-			session.setAttribute("viewUser", viewUser);
+		else if (userPath.equals("/viewPrf") || userPath.equals("/viewPrf.jsp")) {
+			Customer user  = (Customer) session.getAttribute("user");
+			if (user != null && user.getUsername().contentEquals("admin")) {
+				String viewUsername = request.getQueryString();
+				Customer viewUser = customerSB.findByUsername(viewUsername);
+				session.setAttribute("viewUser", viewUser);
+			} else {
+				userPath = "requestNA";
+			}
 		}
 		String url = userPath.trim() + ".jsp";
 		try {
@@ -73,6 +91,36 @@ public class AdminServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		request.setCharacterEncoding("UTF-8");
+		String userPath = request.getRequestURI().substring(request.getContextPath().length());
+		HttpSession session = request.getSession();
+		
+		if (userPath.equals("/updateOrder")) {
+			Customer user  = (Customer) session.getAttribute("user");
+			if (user != null && user.getUsername().contentEquals("admin")) {
+				int orderId = Integer.parseInt(request.getQueryString());
+				CustomerOrder ctmOrder = new CustomerOrder();
+				String orderState = request.getParameter("orderState");
+				
+				ctmOrder = customerOrderSB.find(orderId);
+				ctmOrder.setOrderState(orderState);
+				
+				customerOrderSB.edit(ctmOrder);
+				List<CustomerOrder> ctmOrders = customerOrderSB.findAll();
+				session.setAttribute("ctmOrders", ctmOrders);
+
+				userPath = "orderList";
+			} else {
+				userPath = "requestNA";
+			}
+		}
+		String url = userPath.trim() + ".jsp";
+		try {
+			request.getRequestDispatcher(url).forward(request, response);
+		}
+		catch (Exception ex) {
+			ex.printStackTrace();
+		}
 	}
 
 }

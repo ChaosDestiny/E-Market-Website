@@ -14,10 +14,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import entity.AddressBook;
 import entity.Category;
 import entity.Customer;
 import entity.CustomerOrder;
 import entity.Product;
+import session_bean.AddressBookSessionBean;
 import session_bean.CustomerOrderSessionBean;
 import session_bean.CustomerSessionBean;
 import session_bean.OrderManager;
@@ -26,7 +28,8 @@ import session_bean.ProductSessionBean;
 /**
  * Servlet implementation class UserServlet
  */
-@WebServlet(name = "/UserServlet", urlPatterns = { "/editProfile", "/changePass", "/profile", "/purchaseHistory"})
+@WebServlet(name = "/UserServlet", urlPatterns = { "/editProfile", "/changePass", "/profile", "/purchaseHistory", 
+		"/setDefault", "/addAddress", "/delAddress"})
 public class UserServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -38,6 +41,8 @@ public class UserServlet extends HttpServlet {
 	private OrderManager orderManager;
 	@EJB
 	private ProductSessionBean productSB;
+	@EJB
+	private AddressBookSessionBean addressBookSB;
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -60,15 +65,55 @@ public class UserServlet extends HttpServlet {
 			PrintWriter out = response.getWriter();
 			Customer customer = (Customer) session.getAttribute("user");
 			
-			int orderId = Integer.parseInt(request.getQueryString());
-			Map orderMap = orderManager.getOrderDetails(orderId);
+			if (customer != null) {
+				int orderId = Integer.parseInt(request.getQueryString());
+				Map orderMap = orderManager.getOrderDetails(orderId);
+				
+				// place order details in request scope
+				request.setAttribute("customer", orderMap.get("customer"));
+				request.setAttribute("products", orderMap.get("products"));
+				request.setAttribute("orderRecord", orderMap.get("orderRecord"));
+				request.setAttribute("orderedProducts",	orderMap.get("orderedProducts"));
+				userPath = "/purchaseHistory";
+			} else {
+				userPath = "login";
+			}
+		}
+		else if (userPath.equals("/setDefault")) {
+			response.setContentType("text/html;charset=UTF-8");
+			PrintWriter out = response.getWriter();
+			Customer customer = (Customer) session.getAttribute("user");
 			
-			// place order details in request scope
-			request.setAttribute("customer", orderMap.get("customer"));
-			request.setAttribute("products", orderMap.get("products"));
-			request.setAttribute("orderRecord", orderMap.get("orderRecord"));
-			request.setAttribute("orderedProducts",	orderMap.get("orderedProducts"));
-			userPath = "/purchaseHistory";
+			if (customer != null) {
+				int addressId = Integer.parseInt(request.getQueryString());
+				AddressBook addressBook = addressBookSB.find(addressId);
+				
+				Customer c = new Customer();
+				c = customer;
+				c.setAddress(addressBook.getAddress());
+				c.setCityRegion(addressBook.getCity());
+				c.setPhone(addressBook.getPhone());
+				customerSB.edit(c);
+				session.setAttribute("user", c);
+				userPath = "profile";
+			} else {
+				userPath = "login";
+			}
+		}
+		else if (userPath.equals("/delAddress")) {
+			response.setContentType("text/html;charset=UTF-8");
+			Customer customer = (Customer) session.getAttribute("user");
+			
+			if (customer != null) {
+				int addressId = Integer.parseInt(request.getQueryString());
+				AddressBook addressBook = addressBookSB.find(addressId);
+				addressBookSB.remove(addressBook);
+				customer.removeAddressBook(addressBook);
+				session.setAttribute("user", customer);
+				userPath = "profile";
+			} else {
+				userPath = "login";
+			}
 		}
 		String url = userPath.trim() + ".jsp";
 		try {
@@ -152,10 +197,26 @@ public class UserServlet extends HttpServlet {
 						+ "	</script>");
 				request.getRequestDispatcher("profile.jsp").forward(request, response);
 			}
-			
 			userPath = "/profile";
 		}
 		
+		else if (userPath.equals("/addAddress")) {
+			response.setContentType("text/html;charset=UTF-8");
+			PrintWriter out = response.getWriter();
+			Customer customer = (Customer) session.getAttribute("user");
+			
+			if (customer != null) {
+				String address = (String) request.getParameter("address");
+				String city = (String) request.getParameter("city");
+				String phone = (String) request.getParameter("phone");
+				
+				AddressBook addressBook = addressBookSB.addAddressBook(customer, address, city, phone);
+				customer.addAddressBook(addressBook);
+				userPath = "profile";
+			} else {
+				userPath = "login";
+			}
+		}
 		String url = userPath.trim() + ".jsp";
 		try {
 			request.getRequestDispatcher(url).forward(request, response);

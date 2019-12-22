@@ -10,5 +10,6 @@
 		<class>entity.OrderedProductPK</class>
 		<class>entity.Product</class>
 		<class>entity.ProductDetail</class>
+		<class>entity.AddressBook</class>
 	</persistence-unit>
 </persistence>

@@ -3,6 +3,7 @@
 <%@page import="java.util.List"%>
 <%@page import="java.math.BigDecimal"%>
 <%@page import="java.util.Date"%>
+<%@page import="entity.AddressBook"%>
 
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
@@ -13,13 +14,38 @@
 <link rel="icon" type="image/png" href="images/icons/favicon.ico" />
 <link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css">
 <link rel="stylesheet" type="text/css" href="fonts/Linearicons-Free-v1.0.0/icon-font.min.css">
+<link rel="stylesheet" type="text/css" media="screen" href="css/style.css">
+<link rel="stylesheet" type="text/css" media="screen" href="menu/css/simple_menu.css">
+<link rel="stylesheet" href="css/nivo-slider.css" type="text/css" media="screen">
+<link rel="stylesheet" type="text/css" href="boxes/css/style6.css">
 
 </head>
+<!-- JS Files -->
+<script src="js/jquery.min.js"></script>
+<script src="js/custom.js"></script>
+<script src="js/slides/slides.min.jquery.js"></script>
+<script src="js/cycle-slider/cycle.js"></script>
+<script src="js/nivo-slider/jquery.nivo.slider.js"></script>
+<script src="js/tabify/jquery.tabify.js"></script>
+<script src="js/prettyPhoto/jquery.prettyPhoto.js"></script>
+<script src="js/twitter/jquery.tweet.js"></script>
+<script src="js/scrolltop/scrolltopcontrol.js"></script>
+<script src="js/portfolio/filterable.js"></script>
+<script src="js/modernizr/modernizr-2.0.3.js"></script>
+<script src="js/easing/jquery.easing.1.3.js"></script>
+<script src="js/kwicks/jquery.kwicks-1.5.1.pack.js"></script>
+<script src="js/swfobject/swfobject.js"></script>
+<script src="js/jquery.validate.js" type="text/javascript"></script>
+<script src="js/tabify/jquery.tabify.js" type="text/javascript"></script>
+<!-- FancyBox -->
+<link rel="stylesheet" type="text/css" href="js/fancybox/jquery.fancybox.css" media="all">
+<script src="js/fancybox/jquery.fancybox-1.2.1.js"></script>
 
 <%
 	session.setAttribute("view", "/viewPrf");
 	Customer viewUser = (Customer) session.getAttribute("viewUser");
 	List<CustomerOrder> customerOrders = viewUser.getCustomerOrders();
+	List<AddressBook> addressBooks = viewUser.getAddressBooks();
 %>
 <c:set var='view' value='/profile' scope='session'/>
 
@@ -34,8 +60,9 @@
 <%--</div>
 	<div class="two-third"> --%>
 		<ul id="tabify_menu" class="menu_tab" style="margin: 0;">
-			<li><a href="#fane1">Profile</a></li>
+			<li class="active"><a href="#fane1">Profile</a></li>
 			<li><a href="#fane2">Orders</a></li>
+			<li><a href="#fane3">Orders</a></li>
 		</ul>
 		<div id="fane1" class="tab_content">
              <table>
@@ -101,6 +128,22 @@
 	             		<td>${ctmOrder.getDateCreated()}</td>
 	             		<td>${ctmOrder.getOrderState()}</td>
 	             	</tr>
+            	</c:forEach>
+             </table>
+		</div>
+		<div id="fane3" class="tab_content" >
+             <table>
+             	<th>Address</th>
+				<th>City</th>
+				<th>Phone</th>
+				<th></th>
+				<c:forEach var="adrBook" items="<%=addressBooks %>" varStatus="iter">
+					<tr>
+	             		<td>${adrBook.getAddress()}</td>
+	             		<td>${adrBook.getCity()}</td>
+	             		<td>${adrBook.getPhone()}</td>
+	             		<td></td>
+					</tr>
             	</c:forEach>
              </table>
 		</div>

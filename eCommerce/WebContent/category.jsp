@@ -20,14 +20,14 @@
 					%>
 					<li class="one-third">
 						<p>
-							<a title="<%=p.getName()%>" href="img/demo/<%=p.getImage()%>"
+							<a title="<%=p.getName()%>" href="product?<%=p.getProductId()%>"
 								class="portfolio-item-preview" datarel="prettyPhoto"> <img
 								src="img/demo/<%=p.getImage()%>" alt="" width="210" height="145"
 								class="portfolio-img pretty-box">
 							</a>
 						</p>
 						<h4>
-							<a href="#"><%=p.getName()%></a>
+							<a href="product?<%=p.getProductId()%>"><%=p.getName()%></a>
 						</h4>
 						<p><%=p.getDescription()%></p>
 						<p style="text-align: left">

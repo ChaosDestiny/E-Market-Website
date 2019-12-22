@@ -33,7 +33,6 @@
 * {
 	margin: 0px; 
 	padding: 0px; 
-	box-sizing: border-box;
 }
 
 body, html {
@@ -177,7 +176,7 @@ iframe {
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  padding: 15px;
+  padding: 20px 0px;
   background: #fff;
 }
 
@@ -238,7 +237,7 @@ iframe {
 [ Form ]*/
 
 .login100-form {
-  width: 100%;
+  width: fit-content;
   display: -webkit-box;
   display: -webkit-flex;
   display: -moz-box;
@@ -246,7 +245,7 @@ iframe {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  padding: 43px 88px 93px 190px;
+  padding: 43px 80px 93px 190px;
 }
 
 
@@ -268,8 +267,8 @@ iframe {
 
   position: absolute;
   top: 14px;
-  left: -105px;
-  width: 100px;
+  left: -145px;
+  width: fit-content;
 
 }
 

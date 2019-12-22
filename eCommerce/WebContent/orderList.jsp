@@ -27,21 +27,26 @@
 					<th>Date Created</th>
 					<th>Order Status</th>
 	           
-	             	<c:forEach var="ctmOrder" items="${customerOrderList}" varStatus="iter">
+	             	<c:forEach var="ctmOrder" items="<%=customerOrders%>" varStatus="iter">
 		             	<tr>
-		             		<td>${ctmOrder.getConfirmationNumber()}</td>
+		             		<td><a href="<c:url value='purchaseHistory?${ctmOrder.getOrderId()}'/>">
+		             			${ctmOrder.getConfirmationNumber()}</a></td>
 		             		<td>${ctmOrder.getCustomer().getName()}</td>
 		             		<td>${ctmOrder.getDeliveryAddress()}</td>
-		             		<td>${ctmOrder.getAmount()}</td>
+		             		<td><fmt:formatNumber type="currency" currencySymbol="&dollar; " 
+		             				value="${ctmOrder.getAmount()}" /></td>
 		             		<td>${ctmOrder.getPaymentMethod()}</td>
 		             		<td>${ctmOrder.getDateCreated()}</td>
-		             		<td><select name="orderState" >
-									<option value="Preordered">Preordered</option>
-									<option value="Processing">Processing</option>
-									<option value="Completed">Completed</option>
-									<option value="Cancelled">Cancelled</option>
-									<option value="${ctmOrder.getOrderState()}" selected>${ctmOrder.getOrderState()}</option>			
-								</select>
+		             		<td><form action="<c:url value='updateOrder?${ctmOrder.getOrderId()}'/>" method="post">
+			             			<select name="orderState" >
+										<option value="Ordered">Ordered</option>
+										<option value="Preparing">Preparing</option>
+										<option value="Processing">Processing</option>
+										<option value="Completed">Completed</option>
+										<option value="${ctmOrder.getOrderState()}" selected="selected">${ctmOrder.getOrderState()}</option>			
+									</select>
+									<input type="submit" value="Save">
+								</form>
 		             		</td>
 		             	</tr>
 	            	</c:forEach>

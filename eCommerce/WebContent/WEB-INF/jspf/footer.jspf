@@ -2,6 +2,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@page import="entity.Customer"%>
 <!DOCTYPE html>
 <html>
 	<body>
@@ -17,17 +18,18 @@
 			<div class="one-fourth">
 				<% String adminSS = (String) request.getSession().getAttribute("admin");
 				String customerSS = (String) request.getSession().getAttribute("customer");
+				Customer userFt = (Customer) request.getSession().getAttribute("user");
 				if (adminSS != null) { %>
 				<h3>Administrator</h3>
 				<ul class="footer_links">
-						<li><a href="<c:url value='profile'/>">Admin</a></li>
+						<li><a href="<c:url value='profile'/>"><%=userFt.getName()%></a></li>
 						<li><a href="addProduct.jsp">Add New Product</a>
 						<li><a href="logout">Logout</a></li>
 				</ul>
 				<% } else if (customerSS != null) { %>
 				<h3>Customer</h3>
 				<ul class="footer_links">
-						<li><a href="<c:url value='profile'/>">Profile</a></li>
+						<li><a href="<c:url value='profile'/>"><%=userFt.getName()%></a></li>
 						<li><a href="logout">Logout</a></li>
 				</ul>
 				<% } else{ %>
