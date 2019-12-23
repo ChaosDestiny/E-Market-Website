@@ -77,15 +77,9 @@
 		
 		$("#addrForm").validate({
 			rules : {
-				address : {
-					required : true
-				},
-				city : {
-					required : true
-				},
-				phone : {
-					required : true
-				}
+				address : "required",
+				city : "required",
+				phone : "required"
 			}
 		});
 	});
@@ -213,9 +207,9 @@
             		<tr>
 					<form id="addrForm" action="<c:url value='addAddress'/>" method="post">
 						<fieldset>
-		             		<td><input type="text" name="address" /></td>
-		             		<td><input type="text" name="city" /></td>
-		             		<td><input type="text" name="phone" /></td>
+		             		<td><input id="address" type="text" name="address" /></td>
+		             		<td><input id="city" type="text" name="city" /></td>
+		             		<td><input id="phone" type="text" name="phone" /></td>
 		             		<td><input id="submit" class="button" type="submit" value="Add new address" /></td>
 						</fieldset>
 					</form>

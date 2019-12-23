@@ -62,7 +62,7 @@
 		<ul id="tabify_menu" class="menu_tab" style="margin: 0;">
 			<li class="active"><a href="#fane1">Profile</a></li>
 			<li><a href="#fane2">Orders</a></li>
-			<li><a href="#fane3">Orders</a></li>
+			<li><a href="#fane3">Address Book</a></li>
 		</ul>
 		<div id="fane1" class="tab_content">
              <table>

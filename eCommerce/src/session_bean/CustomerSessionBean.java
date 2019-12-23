@@ -1,7 +1,9 @@
 package session_bean;
 
+import entity.AddressBook;
 import entity.Customer;
 
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -17,6 +19,7 @@ public class CustomerSessionBean extends AbstractSessionBean<Customer> {
 	@PersistenceContext(unitName = "eMarketPU")
 	private EntityManager em;
 
+	
 	protected EntityManager getEntityManager() {
 		return em;
 	}
@@ -55,4 +58,5 @@ public class CustomerSessionBean extends AbstractSessionBean<Customer> {
 		query.getSingleResult();
 		return;
 	}
+	
 }

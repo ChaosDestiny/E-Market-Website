@@ -62,7 +62,6 @@ public class UserServlet extends HttpServlet {
 		}
 		else if (userPath.equals("/purchaseHistory")) {
 			response.setContentType("text/html;charset=UTF-8");
-			PrintWriter out = response.getWriter();
 			Customer customer = (Customer) session.getAttribute("user");
 			
 			if (customer != null) {
@@ -81,7 +80,6 @@ public class UserServlet extends HttpServlet {
 		}
 		else if (userPath.equals("/setDefault")) {
 			response.setContentType("text/html;charset=UTF-8");
-			PrintWriter out = response.getWriter();
 			Customer customer = (Customer) session.getAttribute("user");
 			
 			if (customer != null) {
@@ -110,7 +108,9 @@ public class UserServlet extends HttpServlet {
 				addressBookSB.remove(addressBook);
 				customer.removeAddressBook(addressBook);
 				session.setAttribute("user", customer);
-				userPath = "profile";
+
+				userPath = "/profile";
+				return;
 			} else {
 				userPath = "login";
 			}
@@ -133,7 +133,6 @@ public class UserServlet extends HttpServlet {
 		
 		if (userPath.equals("/editProfile")) {
 			response.setContentType("text/html;charset=UTF-8");
-			PrintWriter out = response.getWriter();
 			Customer customer = (Customer) session.getAttribute("user");
 			
 			//get info from request
@@ -166,14 +165,11 @@ public class UserServlet extends HttpServlet {
 
 			customerSB.edit(c);
 			session.setAttribute("user", c);
-			out.print("<script type=\"text/javascript\">\r\n" + "		alert('Edit successfully!');\r\n"
-						+ "	</script>");
 				
 			userPath = "/profile";
 		}
 		else if (userPath.equals("/changePass")) {
 			response.setContentType("text/html;charset=UTF-8");
-			PrintWriter out = response.getWriter();
 			Customer customer = (Customer) session.getAttribute("user");
 			
 			String curPass = (String) request.getParameter("curPass");
@@ -192,9 +188,6 @@ public class UserServlet extends HttpServlet {
 				c = customer;
 				c.setPassword(newPass);
 				customerSB.edit(c);
-				
-				out.print("<script type=\"text/javascript\">\r\n" + "		alert('Edit successfully!');\r\n"
-						+ "	</script>");
 				request.getRequestDispatcher("profile.jsp").forward(request, response);
 			}
 			userPath = "/profile";
@@ -202,7 +195,6 @@ public class UserServlet extends HttpServlet {
 		
 		else if (userPath.equals("/addAddress")) {
 			response.setContentType("text/html;charset=UTF-8");
-			PrintWriter out = response.getWriter();
 			Customer customer = (Customer) session.getAttribute("user");
 			
 			if (customer != null) {
